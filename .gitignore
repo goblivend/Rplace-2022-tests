@@ -1,0 +1,4 @@
+# Text, zipped and CSV files are data
+*.txt
+*.csv
+*.xz

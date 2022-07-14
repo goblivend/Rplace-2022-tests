@@ -2,3 +2,6 @@
 *.txt
 *.csv
 *.xz
+
+# Temporary files used while saving the .py files
+*.tmp

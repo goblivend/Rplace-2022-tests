@@ -12,7 +12,7 @@ import java.awt.*;
 
 public class rplace {
     public static void main(String[] args) {
-        int sizeSample = 100000000;
+        // int sizeSample = 100000000;
         try {
             // String fileName = "../sample " + sizeSample + ".csv";
             String fileName = "../2022_tilesfix2.csv";
@@ -21,7 +21,7 @@ public class rplace {
             long tEnd = System.currentTimeMillis();
 
 
-            // System.out.print(content);
+            System.out.print(tEnd - tStart);
 
         } catch (Exception e) {
             System.out.println(e);

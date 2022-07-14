@@ -1,4 +1,4 @@
-base_file = '2022_tiles_fix.csv'
+base_file = '2022_tiles_sorted.csv'
 
 
 def createSample(length):
@@ -14,14 +14,10 @@ def nblines():
 
 
 # createSample(10)
-# createSample(50)
 # createSample(100)
-# createSample(500)
 # createSample(1000)
-# createSample(5000)
 # createSample(10000)
-# createSample(100000000)
 
 
-nblines()
+# nblines()
 # 160 353 124

@@ -15,13 +15,13 @@ public class rplace {
         // int sizeSample = 100000000;
         try {
             // String fileName = "../sample " + sizeSample + ".csv";
-            String fileName = "../2022_tilesfix2.csv";
+            String fileName = args[0]; //"../Day 5.csv";
             long tStart = System.currentTimeMillis();
             BufferedImage img = getIMG(fileName);
             long tEnd = System.currentTimeMillis();
 
 
-            System.out.print(tEnd - tStart);
+            System.out.println(tEnd - tStart);
 
         } catch (Exception e) {
             System.out.println(e);
@@ -31,7 +31,6 @@ public class rplace {
 
     public static BufferedImage getIMG(String fileName) {
         try {
-            int mx = 0;
             BufferedImage rplace = new BufferedImage(2000, 2000, BufferedImage.TYPE_INT_ARGB);
             File f = new File(fileName);
             Scanner reader = new Scanner(f);
@@ -45,7 +44,7 @@ public class rplace {
                 // System.out.println(data);
 
                 String ts = data.split(",")[0];
-                System.out.println(ts);
+                // System.out.println(ts);
 
 
 
@@ -60,15 +59,13 @@ public class rplace {
                 String yStr = coordinates.substring(coordinates.indexOf(",") + 1, coordinates.length());
                 int x = Integer.parseInt(xStr);
                 int y = Integer.parseInt(yStr);
-                if (rplace.getRGB(x, y) == 0)
-                    rplace.setRGB(x, y, new Color(color).getRGB());
-                mx = x > mx ? x : mx;
+
+                rplace.setRGB(x, y, new Color(color).getRGB());
                 line +=1;
             }
             reader.close();
             File outputfile = new File(fileName + ".png");
             ImageIO.write(rplace, "png", outputfile);
-            System.out.println(mx);
         } catch (Exception e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

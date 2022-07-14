@@ -13,7 +13,7 @@ import os
 width = os.get_terminal_size().columns * 90 // 100
 nblines = 160_353_124
 linesPerHash = nblines // width
-
+# print(linesPerHash) # 911097
 """
 def free_mem():
     tot_m, used_m, free_m = map(int, os.popen(
@@ -30,17 +30,18 @@ def FixData(file, newfile):
         with open(newfile, 'w') as fw:
             fw.write(fr.readline())
             line = fr.readline()
-            i = 1
+            i = 0
             while line != '':
+                i += 1
                 ######## fixing the TimeStamp milliseconds ########
                 ims = 19  # index milliseconds
                 if line[ims] != '.':
                     line = line[:ims] + '.' + line[ims:]
 
                 ims += 1
-                for i in range(3):
-                    if line[ims + i] == ' ':
-                        line = line[:ims + i] + '0' + line[ims+i:]
+                for n in range(3):
+                    if line[ims + n] == ' ':
+                        line = line[:ims + n] + '0' + line[ims+n:]
 
                 ########          Duplicate lines          ########
                 if line.count(',') == 4:
@@ -55,13 +56,16 @@ def FixData(file, newfile):
                     l2 = starter + ','.join(coos[2:]) + '"\n'
                     fw.write(l1)
                     fw.write(l2)
-                i += 1
-                if i % linesPerHash == 0:
-                    print('#', end='')
-                line = fr.readline()
-    print()
 
-# FixData(basefile, fixedfile)
+                if i % linesPerHash == 0:
+                    print('#', end='', flush=True)
+                line = fr.readline()
+
+            print()
+            print(i, 'lines')
+
+
+# FixData('./sample 10.csv', './sample 10_fixed.csv')
 
 ########### Is Sorted Function ###########
 
@@ -79,7 +83,7 @@ def isSorted(file):
             line = fr.readline()
             i += 1
             if i % linesPerHash == 0:
-                print('#', end='')
+                print('#', end='', flush=True)
         print()
     return True
 # """
@@ -95,6 +99,7 @@ def splitDays(file, names):
         '2': open(names[1], 'w'),
         '3': open(names[2], 'w'),
         '4': open(names[3], 'w'),
+        '5': open(names[4], 'w'),
     }
 
     with open(file) as fr:
@@ -104,10 +109,14 @@ def splitDays(file, names):
         i = 0
         for line in fr:
             if head != line:
-                files[line[9]].write(line)
+                try:
+                    files[line[9]].write(line)
+                except KeyError:
+                    print('\n'+line)
+                    raise KeyError
             i += 1
             if i % linesPerHash == 0:
-                print('#', end='')
+                print('#', end='', flush=True)
         print()
 
     for file in files.values():
@@ -136,13 +145,17 @@ def sortme(files, newf):
 ########### function calls to create the sorted files ###########
 
 
+# """
 with open('./.log', 'w') as log:
+
     print('Fixing data...')
     start = time.time()
-
+    """
     FixData('./2022_tiles.csv', './2022_tiles_fix.csv')
 
-    log.write('Fixing data: ' + str(time.time() - start) + '\n')
+    log.write(str(time.time()) + ' - Fixing data: ' +
+              str(time.time() - start) + '\n')
+    print('Fixed data in ' + str(time.time() - start))
     print('Splitting the file to sort it')
     temp = time.time()
 
@@ -150,16 +163,18 @@ with open('./.log', 'w') as log:
         './temp1.csv',
         './temp2.csv',
         './temp3.csv',
-        './temp4.csv'])
+        './temp4.csv',
+        './temp5.csv', ])
 
-    log.write('Splitting the file to sort it: ' +
+    log.write(str(time.time()) + ' - Splitting the file to sort it: ' +
               str(time.time() - temp) + '\n')
-    print('Splitting the file to sort it in :', time.time() - start)
+    print('Splitting the file to sort it in :', time.time() - temp)
 
     temp = time.time()
 
     os.remove('./2022_tiles_fix.csv')
-    log.write('Removing fixed file: ' + str(time.time() - temp) + '\n')
+    log.write(str(time.time()) + ' - Removing fixed file: ' +
+              str(time.time() - temp) + '\n')
     print('Removing fixed file:', time.time() - start)
 
     print('Sorting the file')
@@ -168,9 +183,11 @@ with open('./.log', 'w') as log:
         './temp1.csv',
         './temp2.csv',
         './temp3.csv',
-        './temp4.csv'], './2022_tiles_sorted.csv')
+        './temp4.csv',
+        './temp5.csv'], './2022_tiles_sorted.csv')
 
-    log.write('Sorting the file: ' + str(time.time() - temp) + '\n')
+    log.write(str(time.time()) + ' - Sorting the file: ' +
+              str(time.time() - temp) + '\n')
     print('Sorted the file in :', time.time() - temp)
 
     print('Removing the temporary files')
@@ -179,20 +196,24 @@ with open('./.log', 'w') as log:
     os.remove('./temp2.csv')
     os.remove('./temp3.csv')
     os.remove('./temp4.csv')
+    os.remove('./temp5.csv')
 
-    log.write('Removing the temporary files: ' +
+    log.write(str(time.time()) + ' - Removing the temporary files: ' +
               str(time.time() - temp) + '\n')
     print('Removed the temporary files in :', time.time() - temp)
 
     print('Splitting the file for each day')
+    """
     temp = time.time()
 
-    splitDays('./filesorted.txt', ['Day 1.csv',
-                                   'Day 2.csv', 'Day 3.csv', 'Day 4.csv'])
+    splitDays('./2022_tiles_sorted.csv', ['Day 1.csv',
+                                          'Day 2.csv', 'Day 3.csv', 'Day 4.csv', 'Day 5.csv'])
 
-    log.write('Splitting the file for each day: ' +
+    log.write(str(time.time()) + ' - Splitting the file for each day: ' +
               str(time.time() - temp) + '\n')
     print('Splitted the file for each day in :', time.time() - temp)
 
-    log.write('Total time: ' + str(time.time() - start) + '\n')
+    log.write(str(time.time()) + ' - Total time: ' +
+              str(time.time() - start) + '\n')
     print('Finished in :', time.time() - start)
+# """

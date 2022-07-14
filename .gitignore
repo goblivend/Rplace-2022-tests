@@ -5,3 +5,10 @@
 
 # Temporary files used while saving the .py files
 *.tmp
+
+# Images files
+*.png
+
+# Logs file for info
+*.log
+

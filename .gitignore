@@ -6,9 +6,12 @@
 # Temporary files used while saving the .py files
 *.tmp
 
-# Images files
+# Images and Videos files
 *.png
+*.mov
 
 # Logs file for info
 *.log
 
+# Java files
+*.class
